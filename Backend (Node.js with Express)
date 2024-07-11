@@ -1,0 +1,37 @@
+const express = require('express');
+const bodyParser = require('body-parser');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+// Middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+// Sample database (you would typically use a real database like MySQL or MongoDB)
+let books = [
+    { id: 1, title: 'Book 1', author: 'Author 1', price: 10.99 },
+    { id: 2, title: 'Book 2', author: 'Author 2', price: 12.99 }
+];
+
+// Routes
+app.get('/api/books', (req, res) => {
+    res.json(books);
+});
+
+app.post('/api/cart', (req, res) => {
+    // Implement adding books to cart logic
+    const { bookId } = req.body;
+    // Example: Add book to cart logic
+    // This is a simplified version, in reality, you would manage cart in a session or database
+    const selectedBook = books.find(book => book.id === parseInt(bookId));
+    if (selectedBook) {
+        res.json({ message: 'Book added to cart', book: selectedBook });
+    } else {
+        res.status(404).json({ message: 'Book not found' });
+    }
+});
+
+// Start server
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
+});
